@@ -1,0 +1,385 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "mode": "url",
+          "value": "https://drive.google.com/file/d/11Koq9q53nkk0F5Y8eZgaWJUVR03I4-MM/view"
+        },
+        "options": {}
+      },
+      "id": "aa2191dd-4aec-4b06-b1cb-43d5f78d3553",
+      "name": "Google Drive",
+      "type": "n8n-nodes-base.googleDrive",
+      "position": [
+        240,
+        112
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {
+        "chunkSize": 3000,
+        "chunkOverlap": 200,
+        "options": {}
+      },
+      "id": "4bd5e51d-669c-43cf-a7a2-e583855a64f4",
+      "name": "Recursive Character Text Splitter",
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "position": [
+        752,
+        512
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "a6d7f1d0-a29a-4b1f-a985-344996ab0779",
+      "name": "Embeddings OpenAI",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "position": [
+        592,
+        320
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "### Load data into database\nFetch file from Google Drive, split it into chunks and insert into Pinecone index",
+        "height": 806.6556079800943,
+        "width": 978.0454109366399,
+        "color": 7
+      },
+      "id": "9d67cdfd-28c0-4170-afde-b5f5be3db948",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        0
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "### Chat with database\nEmbed the incoming chat message and use it retrieve relevant chunks from the vector store. These are passed to the model to formulate an answer ",
+        "height": 806.8716167324012,
+        "width": 654.1028019808174,
+        "color": 7
+      },
+      "id": "833574b1-3aa4-4d31-a6db-a92207151132",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1264,
+        0
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "options": {}
+      },
+      "id": "724bd65b-19a5-46ba-ba73-2ee2d5ab31b6",
+      "name": "Default Data Loader",
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "position": [
+        752,
+        320
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Try me out\n1. In Pinecone, create an index with 1536 dimensions and select it in *both* Pinecone nodes\n2. Click 'test workflow' at the bottom of the canvas to load data into the vector store\n3. Click 'chat' at the bottom of the canvas to ask questions about the data",
+        "height": 264.61498034081166
+      },
+      "id": "fc60848b-be85-49b5-afe0-06af27b7638b",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -288,
+        320
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "b7559e9e-8047-4ca0-be88-a477fc0006b7",
+      "name": "Question and Answer Chain",
+      "type": "@n8n/n8n-nodes-langchain.chainRetrievalQa",
+      "position": [
+        1312,
+        112
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "45ca6dd7-3e0e-4741-bac8-3c5a1c57e56d",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "position": [
+        1312,
+        336
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "d8758061-d8a8-4cfe-a18f-a3f234ba2000",
+      "name": "Embeddings OpenAI2",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "position": [
+        1440,
+        672
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {},
+      "id": "252807c5-ed65-455c-9127-c775d5ce4dc9",
+      "name": "Vector Store Retriever",
+      "type": "@n8n/n8n-nodes-langchain.retrieverVectorStore",
+      "position": [
+        1504,
+        336
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "pineconeIndex": {
+          "__rl": true,
+          "mode": "list",
+          "value": "test-index",
+          "cachedResultName": "test-index"
+        },
+        "options": {}
+      },
+      "id": "ac29b13e-3e8b-4892-9258-96d453515226",
+      "name": "Read Pinecone Vector Store",
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "position": [
+        1440,
+        512
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "pineconeIndex": {
+          "__rl": true,
+          "mode": "list",
+          "value": "test-index",
+          "cachedResultName": "test-index"
+        },
+        "options": {
+          "clearNamespace": true
+        }
+      },
+      "id": "8f6bb986-22e6-4439-a1d2-5c8d0e972633",
+      "name": "Insert into Pinecone vector store",
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "position": [
+        608,
+        112
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "f2697759-88e8-4c9b-ba9c-b1fe615a0252",
+      "name": "When clicking 'Chat' button below",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "position": [
+        1104,
+        112
+      ],
+      "webhookId": "e259b6fe-b2a9-4dbc-98a4-9a160e7ac10c",
+      "typeVersion": 1
+    },
+    {
+      "parameters": {},
+      "id": "7cf28537-289c-4b76-b75b-2de29f7eef9c",
+      "name": "When clicking 'Test Workflow' button",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        -176,
+        112
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "50025ff5-1b53-475f-b150-2aafef1c4c21",
+              "name": "file_url",
+              "type": "string",
+              "value": "https://drive.google.com/file/d/11Koq9q53nkk0F5Y8eZgaWJUVR03I4-MM/view"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a3475809-1a1f-4c79-84b3-34c96044df21",
+      "name": "Set Google Drive file URL",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        48,
+        112
+      ],
+      "typeVersion": 3.3
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Drive": {
+      "main": [
+        [
+          {
+            "node": "Insert into Pinecone vector store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Insert into Pinecone vector store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Question and Answer Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI2": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Read Pinecone Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Insert into Pinecone vector store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vector Store Retriever": {
+      "ai_retriever": [
+        [
+          {
+            "node": "Question and Answer Chain",
+            "type": "ai_retriever",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Google Drive file URL": {
+      "main": [
+        [
+          {
+            "node": "Google Drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Pinecone Vector Store": {
+      "ai_vectorStore": [
+        [
+          {
+            "node": "Vector Store Retriever",
+            "type": "ai_vectorStore",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recursive Character Text Splitter": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Default Data Loader",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking 'Chat' button below": {
+      "main": [
+        [
+          {
+            "node": "Question and Answer Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking 'Test Workflow' button": {
+      "main": [
+        [
+          {
+            "node": "Set Google Drive file URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "638c4188-074f-4d61-adcd-bb5705b3a631",
+  "meta": {
+    "instanceId": "f1073e0ef9d6c3f612165fb818e806875cadef32fd465fe392d4049f979c3bab"
+  },
+  "id": "bqmCJ0ibI39RaQ1Q",
+  "tags": []
+}
